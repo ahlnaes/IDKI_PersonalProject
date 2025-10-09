@@ -67,5 +67,10 @@ namespace Player
             var target = Quaternion.LookRotation(direction.normalized, Vector3.up);
             transform.rotation = rotateSpeedDegPerSec <= 0f ? target : Quaternion.Lerp(transform.rotation, target, rotateSpeedDegPerSec * Time.deltaTime);
         }
+
+        public Vector3 GetAimDirection()
+        {
+            return cam.ScreenToWorldPoint(pointerPos.action.ReadValue<Vector2>()).normalized;
+        }
     }
 }

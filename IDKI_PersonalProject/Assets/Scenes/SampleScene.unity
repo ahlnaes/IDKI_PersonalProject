@@ -418,9 +418,10 @@ GameObject:
   - component: {fileID: 711781286}
   - component: {fileID: 711781285}
   - component: {fileID: 711781291}
+  - component: {fileID: 711781292}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: Player
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -443,6 +444,7 @@ MonoBehaviour:
   dashCooldown: 2
   moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   dashAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  weapon: {fileID: 711781292}
 --- !u!143 &711781286
 CharacterController:
   m_ObjectHideFlags: 0
@@ -577,6 +579,20 @@ MonoBehaviour:
     m_Bits: 8
   rotateSpeedDegPerSec: 720
   maxRayDistance: 200
+--- !u!114 &711781292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711781284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 076d917f7b176024cbc751c12bb18fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  source: {fileID: 711781290}
+  config: {fileID: 11400000, guid: 6264067f2c68edb4b918b0c5c46122fa, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

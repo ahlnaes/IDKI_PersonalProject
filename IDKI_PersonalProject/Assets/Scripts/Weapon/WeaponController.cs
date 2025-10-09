@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] GameObject projectile;
-    private WeaponConfig config;
+
+    [SerializeField] private Transform source;
+    [SerializeField] private WeaponConfig config;
+    
     private CooldownTimer cooldown;
-    private Transform source;
 
     void Awake()
     {
@@ -18,12 +19,24 @@ public class WeaponController : MonoBehaviour
     }
     public bool CanFire()
     {
-        if (!config || !source || !projectile) return false;
+        if (!config || !source) return false;
         return !cooldown.IsActive;
     }
 
-    public void Fire()
+    /// <summary>
+    /// Vector3 target should be world-space so I convert before calling
+    /// </summary>
+    /// <param name="target"></param>
+    public void Fire(Vector3 target)
     {
-        
+        if(!CanFire()) return;
+        if (target == Vector3.zero) target = source.forward;
+
+        var projectile = Instantiate(config.projectile, source.position, Quaternion.LookRotation(target));
+        projectile.Launch(target);
+        cooldown.Start(1f/config.fireRate);
+
     }
+    
+    public Vector3 SourcePosition => source.position;
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 792443465667013840}
   - component: {fileID: 6968771467710839466}
   - component: {fileID: 4458025361593152245}
+  - component: {fileID: 5951417540471453768}
   m_Layer: 0
   m_Name: ProjectileSquare
   m_TagString: Untagged
@@ -136,3 +137,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5951417540471453768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6762096220524951015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adbb58874073f2740aa2be45ba302bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 60
+  damage: 10
+  range: 50
+  useGravity: 0
