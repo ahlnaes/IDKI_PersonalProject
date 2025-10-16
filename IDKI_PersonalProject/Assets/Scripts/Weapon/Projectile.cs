@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
     [Header("Stats")] 
     [SerializeField] private float speed = 60f;
     [SerializeField] private float damage = 10f;
-    [SerializeField] private float range = 10f;
+    [SerializeField] private float range = 1f;
     [SerializeField] private bool useGravity = false;
     
     private Rigidbody rb;
@@ -36,5 +36,9 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
     }
 }

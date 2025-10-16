@@ -86,7 +86,7 @@ namespace Player.Movement
                 dashPressedThisFrame = false;
             }
 
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame || Input.GetMouseButton(0))
             {
                 var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
                 if (!Physics.Raycast(ray, out var hit)) return;

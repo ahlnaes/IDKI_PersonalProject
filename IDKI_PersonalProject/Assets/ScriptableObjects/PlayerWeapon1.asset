@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerWeapon1
   m_EditorClassIdentifier: 
   fireRate: 5
-  projectile: {fileID: 5951417540471453768, guid: 2af8adae787cc0c4bae9f146805f3cbe, type: 3}
+  projectile: {fileID: -1718584124560059588, guid: 4a8f840d4d06de0478fe39b97b36c5f1, type: 3}
