@@ -7,6 +7,7 @@ namespace Player.Movement
 {
     public class PlayerController : MonoBehaviour
     {
+        private static readonly int Dash = Animator.StringToHash("Dash");
         [Header("Movement")] public float speed = 4f;
 
         [Header("Dash")] public float dashSpeed = 20f;
@@ -19,8 +20,11 @@ namespace Player.Movement
         [Header("Weapon")] [SerializeField] private WeaponController weapon;
 
         private CharacterController controller;
+        private Animator animator;
         private DashAbility dash;
         private CameraRelativeDirection mapper;
+        private TrailRenderer trailRenderer;
+        private AudioSource audioSource;
 
         // stuff to make dashing work etc
         private System.Action<InputAction.CallbackContext> dashHandler;
@@ -31,9 +35,23 @@ namespace Player.Movement
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
+            animator = GetComponent<Animator>();
+            trailRenderer = GetComponentInChildren<TrailRenderer>();
+            audioSource = GetComponent<AudioSource>();
             dash = new DashAbility(dashSpeed, dashDuration, dashCooldown);
-            dash.OnDashStarted += () => DashStarted?.Invoke();
-            dash.OnDashEnded += () => DashEnded?.Invoke();
+            dash.OnDashStarted += () =>
+            {
+                animator.ResetTrigger(Dash);
+                animator.SetTrigger(Dash);
+                AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+                trailRenderer.enabled = true;
+                DashStarted?.Invoke();
+            };
+            dash.OnDashEnded += () =>
+            {
+                trailRenderer.enabled = false;
+                DashEnded?.Invoke();
+            };
 
             mapper = new CameraRelativeDirection();
 
