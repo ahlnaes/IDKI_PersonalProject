@@ -411,6 +411,7 @@ MonoBehaviour:
   - {fileID: 3748935939545297202, guid: d7bd4ac2cb510eb4381894ec977f1cb0, type: 3}
   spawnInterval: 3
   spawnDistance: 1
+  spawnAmount: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,6 +542,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 421504813}
+  - component: {fileID: 421504814}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -563,6 +565,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &421504814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421504812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a762ac5e7e2b4ff4da95e9e9a53260de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &676359949
 GameObject:
   m_ObjectHideFlags: 0

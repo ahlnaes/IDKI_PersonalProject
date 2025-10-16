@@ -6,11 +6,13 @@ public class Projectile : MonoBehaviour
 {
     [Header("Stats")] 
     [SerializeField] private float speed = 60f;
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private float damage = 1f;
     [SerializeField] private float range = 1f;
     [SerializeField] private bool useGravity = false;
-    private AudioSource audioSource;
     
+    public float Damage => damage;
+    
+    private AudioSource audioSource;
     private Rigidbody rb;
     private float life, maxLife;
 
@@ -46,4 +48,5 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
     }
+    
 }

@@ -5082,7 +5082,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 60
-  damage: 10
+  damage: 1
   range: 1
   useGravity: 0
 --- !u!54 &4867529918631587988
