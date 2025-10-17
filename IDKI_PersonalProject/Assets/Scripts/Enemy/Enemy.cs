@@ -6,7 +6,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float maxHealth = 3f;
     [SerializeField] private float currentHealth;
     [SerializeField] private int scoreValue = 1;
+    [SerializeField] private float damageValue = 1f;
     private Animation spawnAnim;
+    
+    public float Damage => damageValue;
 
     private void Awake()
     {

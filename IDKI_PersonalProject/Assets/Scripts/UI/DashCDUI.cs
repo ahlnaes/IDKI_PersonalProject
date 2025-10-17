@@ -16,7 +16,7 @@ public class DashCDUI : MonoBehaviour
         
         var t = player.GetRemainingCooldown();
         txt.color = new Color(1, 1, 1, t > 0 ? 0.5f : 1f); // wow you can do this inside the parameters
-        var arrows = Mathf.Clamp(Mathf.CeilToInt(2f - t), 0, 3);
+        var arrows = Mathf.Clamp(Mathf.CeilToInt(2f - t), 0, 4);
         txt.text = new string('>', arrows);
     }
     

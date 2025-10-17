@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,6 +19,11 @@ namespace Player.Movement
         public InputActionReference dashAction;
 
         [Header("Weapon")] [SerializeField] private WeaponController weapon;
+        
+        [Header("Health")]
+        [SerializeField] private float maxHealth = 10f;
+        [SerializeField] private float currentHealth;
+        [SerializeField] private RectTransform healthBar;
 
         private CharacterController controller;
         private Animator animator;
@@ -38,6 +44,9 @@ namespace Player.Movement
             animator = GetComponent<Animator>();
             trailRenderer = GetComponentInChildren<TrailRenderer>();
             audioSource = GetComponent<AudioSource>();
+            
+            currentHealth = maxHealth;
+            
             dash = new DashAbility(dashSpeed, dashDuration, dashCooldown);
             dash.OnDashStarted += () =>
             {
@@ -110,6 +119,22 @@ namespace Player.Movement
                 if (!Physics.Raycast(ray, out var hit)) return;
                 var direction = (hit.point - weapon.SourcePosition).normalized;
                 weapon.Fire(direction);
+            }
+        }
+
+        private void UpdateHealthBar()
+        {
+            var width = Mathf.Clamp01(currentHealth / maxHealth);
+            healthBar.localScale = new Vector3(width, 1f, 1f);
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.gameObject.CompareTag("Enemy"))
+            {
+                var enemy = other.gameObject.GetComponent<Enemy>();
+                currentHealth -= enemy.Damage;
+                UpdateHealthBar();
             }
         }
 
