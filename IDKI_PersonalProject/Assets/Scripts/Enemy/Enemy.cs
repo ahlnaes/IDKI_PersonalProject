@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// simple enemy class
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float maxHealth = 3f;
@@ -27,6 +28,7 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             ScoreManager.Instance?.AddScore(scoreValue);
+            PowerUpSpawner.Instance?.TrySpawn(transform.position);
             Destroy(gameObject);
         }
     }

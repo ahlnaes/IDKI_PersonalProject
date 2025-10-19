@@ -35,14 +35,7 @@ namespace Player
 
         private void LateUpdate()
         {
-            //if (UseStickAim()) return;
             UsePointerAim();
-        }
-
-        //placeholder for controller
-        private bool UseStickAim()
-        {
-            return false;
         }
 
         private void UsePointerAim()

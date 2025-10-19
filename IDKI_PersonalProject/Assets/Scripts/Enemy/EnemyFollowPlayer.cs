@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//make the enemy move towards the player
 public class EnemyFollowPlayer : MonoBehaviour
 {
     [SerializeField] private float speed = 1.5f;

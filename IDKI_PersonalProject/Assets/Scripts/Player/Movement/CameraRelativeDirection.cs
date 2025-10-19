@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//used to make isometric easier
 namespace Player.Movement
 {
     public class CameraRelativeDirection

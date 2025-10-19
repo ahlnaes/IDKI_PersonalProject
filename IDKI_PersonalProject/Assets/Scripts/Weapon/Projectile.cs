@@ -12,7 +12,9 @@ public class Projectile : MonoBehaviour
     
     public float Damage => damage;
     
-    private AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioClip projectileSoundClip;
+    public AudioClip projectileSoundClip2;
     private Rigidbody rb;
     private float life, maxLife;
 
@@ -27,7 +29,7 @@ public class Projectile : MonoBehaviour
     public void Launch(Vector3 dir)
     {
         audioSource.pitch = Random.Range(0.8f, 1.2f);
-        AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+        AudioSource.PlayClipAtPoint(projectileSoundClip, transform.position);
         dir.y = 0f;
         rb.linearVelocity = dir.normalized * speed;
         life = 0f;
@@ -42,6 +44,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        AudioSource.PlayClipAtPoint(projectileSoundClip2, transform.position); // playing another sound on collision doesn't quite work yet
         Destroy(gameObject);
     }
 

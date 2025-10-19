@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 
+//general gamemanager for game logic
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject pauseScreen;

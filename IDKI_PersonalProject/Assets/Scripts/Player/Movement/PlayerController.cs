@@ -25,6 +25,10 @@ namespace Player.Movement
         [SerializeField] private float currentHealth;
         [SerializeField] private RectTransform healthBar;
 
+        [Header("VFx")] [SerializeField] 
+        private GameObject healfx;
+        [SerializeField] private GameObject speedfx;
+
         private CharacterController controller;
         private Animator animator;
         private DashAbility dash;
@@ -37,6 +41,11 @@ namespace Player.Movement
         private bool dashPressedThisFrame;
         public System.Action DashStarted;
         public System.Action DashEnded;
+        
+        // Add fields
+        private float baseSpeed;
+        private Coroutine speedBuffCo;
+        private Coroutine healthBuffCo;
 
         private void Awake()
         {
@@ -46,6 +55,8 @@ namespace Player.Movement
             audioSource = GetComponent<AudioSource>();
             
             currentHealth = maxHealth;
+            baseSpeed = speed;
+            speedfx.SetActive(false);
             
             dash = new DashAbility(dashSpeed, dashDuration, dashCooldown);
             dash.OnDashStarted += () =>
@@ -140,5 +151,47 @@ namespace Player.Movement
 
         public float GetRemainingCooldown() => dash.RemainingCooldown;
         public bool IsDashing() => dash.IsDashing;
+        
+        public float MaxHealth => maxHealth;
+        public void Heal(float amount)
+        {
+            currentHealth = Mathf.Min(maxHealth, currentHealth + Mathf.Abs(amount));
+            healfx.SetActive(true);
+            healthBuffCo = StartCoroutine(HealFX(1f));
+        }
+        
+        public void ApplySpeedBuff(float multiplier, float duration)
+        {
+            if (speedBuffCo != null) StopCoroutine(speedBuffCo);
+            speedBuffCo = StartCoroutine(SpeedBuffCR(multiplier, duration));
+        }
+
+        private System.Collections.IEnumerator SpeedBuffCR(float mult, float dur)
+        {
+            speed = baseSpeed * mult;
+            speedfx.SetActive(true);
+            var t = dur;
+            while (t > 0f)
+            {
+                t -= Time.deltaTime;
+                yield return null;
+            }
+            speed = baseSpeed;
+            speedfx.SetActive(false);
+            speedBuffCo = null;
+        }
+
+        private System.Collections.IEnumerator HealFX(float dur)
+        {
+            healfx.SetActive(true);
+            var t = dur;
+            while (t > 0f)
+            {
+                t -= Time.deltaTime;
+                yield return null;
+            }
+            healfx.SetActive(false);
+        }
+
     }
 }

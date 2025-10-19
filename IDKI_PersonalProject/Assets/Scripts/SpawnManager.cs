@@ -33,7 +33,7 @@ public class SpawnManager : MonoBehaviour
     void SpawnEnemy(int amount)
     {
         if (enemies.Length == 0) return;
-        // get what's visible
+        // get what's visible in the camera
         var height = cam.orthographicSize * 2f;
         var width = height * cam.aspect;
         var camPos = cam.transform.position;
@@ -51,7 +51,7 @@ public class SpawnManager : MonoBehaviour
             switch (edge)
             {
                 case 0: // left
-                    spawnPos.x = left - spawnDistance;
+                    spawnPos.x = left - spawnDistance; // make them spawn just a bit outside of screen (doesn't quite work yet)
                     spawnPos.z = Random.Range(bottom, top);
                     break;
                 case 1: // right

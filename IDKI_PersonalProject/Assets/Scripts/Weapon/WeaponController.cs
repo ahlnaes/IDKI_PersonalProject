@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// class for the weapon that the player uses
 public class WeaponController : MonoBehaviour
 {
 

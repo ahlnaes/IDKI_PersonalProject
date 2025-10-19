@@ -5085,6 +5085,9 @@ MonoBehaviour:
   damage: 1
   range: 1
   useGravity: 0
+  audioSource: {fileID: -5165509003575849856}
+  projectileSoundClip: {fileID: 8300000, guid: 32e0ec541d1445b4984a084488659805, type: 3}
+  projectileSoundClip2: {fileID: 8300000, guid: bcc4935bb46465241bcb51228bbdc1bb, type: 3}
 --- !u!54 &4867529918631587988
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5143,8 +5146,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c6f5232505905174385721541614c319, type: 3}
-  m_Resource: {fileID: 8300000, guid: c6f5232505905174385721541614c319, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

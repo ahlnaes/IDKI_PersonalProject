@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//script that makes camera follow player around
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target; 
