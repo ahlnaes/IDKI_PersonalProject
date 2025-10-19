@@ -8,6 +8,7 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
 
     private int score;
+    public string Score { get; set; }
 
     private void Awake()
     {
@@ -35,5 +36,10 @@ public class ScoreManager : MonoBehaviour
     {
         if (scoreText)
             scoreText.text = $"score: {score}"; //string interpolation, very nice
+    }
+
+    public int GetScore()
+    {
+        return score;
     }
 }

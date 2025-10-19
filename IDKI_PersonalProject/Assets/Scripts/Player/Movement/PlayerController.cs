@@ -25,8 +25,8 @@ namespace Player.Movement
         [SerializeField] private float currentHealth;
         [SerializeField] private RectTransform healthBar;
 
-        [Header("VFx")] [SerializeField] 
-        private GameObject healfx;
+        [Header("VFx")] 
+        [SerializeField] private GameObject healfx;
         [SerializeField] private GameObject speedfx;
 
         private CharacterController controller;
@@ -41,6 +41,7 @@ namespace Player.Movement
         private bool dashPressedThisFrame;
         public System.Action DashStarted;
         public System.Action DashEnded;
+        public GameManager gameManager;
         
         // Add fields
         private float baseSpeed;
@@ -146,6 +147,10 @@ namespace Player.Movement
                 var enemy = other.gameObject.GetComponent<Enemy>();
                 currentHealth -= enemy.Damage;
                 UpdateHealthBar();
+                if (currentHealth <= 0)
+                {
+                    gameManager.GameOver();
+                }
             }
         }
 
