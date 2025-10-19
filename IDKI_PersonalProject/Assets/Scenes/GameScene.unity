@@ -1250,7 +1250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpPrefab: {fileID: 2257638021108469534, guid: 0be6d2719e7fd6c4781ca0393da51739, type: 3}
-  dropChance: 1
+  dropChance: 0.4
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

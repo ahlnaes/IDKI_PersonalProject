@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
         pauseScreen.SetActive(false);
         inGameScreen.SetActive(true);
         isGameActive = true;
+        Time.timeScale = 1;
     }
 
     private void PauseGame()
@@ -64,7 +65,8 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        StartGame();
+        SceneManager.LoadScene("GameScene");
     }
 
 
