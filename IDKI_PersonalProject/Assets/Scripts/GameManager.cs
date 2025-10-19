@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 
 //general gamemanager for game logic
 public class GameManager : MonoBehaviour
@@ -54,6 +55,16 @@ public class GameManager : MonoBehaviour
         gameOverScreen.GetComponentInChildren<TextMeshProUGUI>().text = "Game Over\n score: " + ScoreManager.Instance.GetScore();
         inGameScreen.SetActive(false);
         gameOverScreen.SetActive(true);
+    }
+
+    public void Quit()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 
