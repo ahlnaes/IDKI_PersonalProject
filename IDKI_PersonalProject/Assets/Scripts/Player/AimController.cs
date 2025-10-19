@@ -35,14 +35,7 @@ namespace Player
 
         private void LateUpdate()
         {
-            //if (UseStickAim()) return;
             UsePointerAim();
-        }
-
-        //placeholder for controller
-        private bool UseStickAim()
-        {
-            return false;
         }
 
         private void UsePointerAim()
@@ -51,8 +44,8 @@ namespace Player
 
             if (!cam) return;
 
-            Vector2 screen = pointerPos.action.ReadValue<Vector2>(); // 2d vector screen coords (mouse pos)
-            Ray ray = cam.ScreenPointToRay(screen); // docs: Returns a ray going from camera through a screen point. makes the screen pos world space
+            var screen = pointerPos.action.ReadValue<Vector2>(); // 2d vector screen coords (mouse pos)
+            var ray = cam.ScreenPointToRay(screen); // docs: Returns a ray going from camera through a screen point. makes the screen pos world space
             Debug.DrawRay(ray.origin, ray.direction, Color.red);
 
             if (!Physics.Raycast(ray, out var hit, maxRayDistance, aimMask, QueryTriggerInteraction.Ignore)) return;

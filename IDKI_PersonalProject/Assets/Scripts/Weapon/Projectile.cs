@@ -8,7 +8,9 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float speed = 60f;
     [SerializeField] private float damage = 1f;
     [SerializeField] private float range = 1f;
-    [SerializeField] private bool useGravity = false;
+    [SerializeField] private bool useGravity;
+
+    [SerializeField] private ParticleSystem hitParticles;
     
     public float Damage => damage;
     
@@ -42,11 +44,40 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        var contact = collision.contacts[0];
+        var point = contact.point;
+        var normal = contact.normal;
+        HitVFX(point + normal * 0.02f, normal);
         Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.gameObject.CompareTag("Player"))
+        {
+            // //used to position the "splash" fx from the projectile
+            // var point = other.ClosestPoint(transform.position);
+            //
+            // var incoming = (rb)
+            //     ? rb.linearVelocity.normalized
+            //     : transform.forward;
+            //
+            // var normal = -incoming; // reversed direction
+            //
+            // HitVFX(point + normal * 0.02f, normal);
+            // Destroy(gameObject);
+            Destroy(gameObject);
+        }
+    }
+    
+    private void HitVFX(Vector3 pos, Vector3 normal)
+    {
+        if (!hitParticles) return;
+        
+        var rotation = Quaternion.LookRotation(pos, normal);
+        var vfx = Instantiate(hitParticles, pos, rotation);
+        var main = vfx.main;
+        Destroy(vfx.gameObject, main.duration + main.startLifetime.constantMax);
     }
     
 }

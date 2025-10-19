@@ -8,9 +8,17 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject inGameScreen;
+    [SerializeField] private GameObject gameOverScreen;
+
+    private bool debugActive;
 
     private bool isGameActive;
     private bool isPaused;
+
+    private void Start()
+    {
+        StartGame();
+    }
 
     private void Update()
     {
@@ -18,11 +26,6 @@ public class GameManager : MonoBehaviour
         {
             PauseGame();
         }
-    }
-
-    private void Start()
-    {
-        StartGame();
     }
 
     private void StartGame()
@@ -40,7 +43,4 @@ public class GameManager : MonoBehaviour
         inGameScreen.SetActive(!isPaused);
         Time.timeScale = isPaused ? 0 : 1;
     }
-
-
-    
 }

@@ -21,7 +21,6 @@ namespace Player.Movement
         private void InitAxes()
         {
             if (initialized) return;
-            Debug.Assert(camera is not null, "_camera != null");
             
             camF = camera.transform.forward;
             camF.y = 0f;

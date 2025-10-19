@@ -1,42 +1,53 @@
-using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float maxHealth = 3f;
-    [SerializeField] private float currentHealth;
-    [SerializeField] private int scoreValue = 1;
-    [SerializeField] private float damageValue = 1f;
-    private Animation spawnAnim;
-    
-    public float Damage => damageValue;
+    [Header("Health/Score")]
+    [SerializeField] protected Health health; 
+    [SerializeField] protected int scoreValue = 10;
 
-    private void Awake()
+    public bool IsDead => health.IsDead;
+
+    public System.Action<Enemy> OnDied;
+    public System.Action<float> OnDamaged;
+
+    protected virtual void Awake()
     {
-        spawnAnim = GetComponent<Animation>();
+        health = GetComponent<Health>();
+        
+        health.OnChanged += (cur, max) => OnDamaged?.Invoke(cur);
+        health.OnDied    += Die;
     }
 
-    private void Start()
+    protected virtual void OnDestroy()
     {
-        spawnAnim.Play("enemy_spawn");
-        currentHealth = maxHealth;
+        if (!health) return;
+        health.OnDied -= Die;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        if (currentHealth <= 0)
+        if (IsDead) return;
+        Tick();
+    }
+
+    protected abstract void Tick();
+
+    // IDamageable
+    public virtual void TakeDamage(float amount) => health?.TakeDamage(amount);
+
+    protected virtual void Die()
+    {
+        OnDied?.Invoke(this);
+        Destroy(gameObject);
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        var proj = other.GetComponent<Projectile>();
+        if (proj)
         {
-            ScoreManager.Instance?.AddScore(scoreValue);
-            Destroy(gameObject);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(nameof(Projectile)))
-        {
-            Projectile projectile = other.gameObject.GetComponent<Projectile>();
-            currentHealth -= projectile.Damage;
+            TakeDamage(proj.Damage);    
             Destroy(other.gameObject);
         }
     }

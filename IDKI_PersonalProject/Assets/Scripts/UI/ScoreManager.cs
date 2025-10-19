@@ -1,39 +1,42 @@
 using TMPro;
 using UnityEngine;
 
-public class ScoreManager : MonoBehaviour
+namespace UI
 {
-    public static ScoreManager Instance { get; private set; }
-
-    [SerializeField] private TextMeshProUGUI scoreText;
-
-    private int score;
-
-    private void Awake()
+    public class ScoreManager : MonoBehaviour
     {
-        // singleton since not many needed
-        if (Instance && !Equals(Instance, this))
+        private static ScoreManager Instance { get; set; }
+
+        [SerializeField] private TextMeshProUGUI scoreText;
+
+        private int score;
+
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
+            // singleton since not many needed
+            if (Instance && !Equals(Instance, this))
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
         }
-        Instance = this;
-    }
 
-    private void Start()
-    {
-        UpdateScoreUI();
-    }
+        private void Start()
+        {
+            UpdateScoreUI();
+        }
 
-    public void AddScore(int amount)
-    {
-        score += amount;
-        UpdateScoreUI();
-    }
+        public void AddScore(int amount)
+        {
+            score += amount;
+            UpdateScoreUI();
+        }
 
-    private void UpdateScoreUI()
-    {
-        if (scoreText)
-            scoreText.text = $"score: {score}"; //string interpolation, very nice
+        private void UpdateScoreUI()
+        {
+            if (scoreText)
+                scoreText.text = $"score: {score}"; //string interpolation, very nice
+        }
     }
 }

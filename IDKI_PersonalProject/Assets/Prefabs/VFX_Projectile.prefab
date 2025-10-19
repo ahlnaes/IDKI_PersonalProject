@@ -3869,12 +3869,12 @@ ParticleSystem:
     primitives: []
   SubModule:
     serializedVersion: 2
-    enabled: 0
+    enabled: 1
     subEmitters:
     - serializedVersion: 3
       emitter: {fileID: 0}
-      type: 0
-      properties: 0
+      type: 2
+      properties: 1
       emitProbability: 1
   LightsModule:
     enabled: 0
@@ -5085,6 +5085,7 @@ MonoBehaviour:
   damage: 1
   range: 1
   useGravity: 0
+  hitParticles: {fileID: 8878007330507448348, guid: fecbbeadea82cbd48829eb0e3e189708, type: 3}
 --- !u!54 &4867529918631587988
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5128,7 +5129,7 @@ BoxCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.20567834, y: 0.20086423, z: 0.21049246}

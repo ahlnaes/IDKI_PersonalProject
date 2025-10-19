@@ -7,33 +7,36 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject[] enemies;
+    [SerializeField] private GameObject boss;
     [SerializeField] private float spawnInterval;
     [SerializeField] private float spawnDistance; // distance from the edge of the camera view
     [SerializeField] private int spawnAmount;
 
     private float timer;
     private float elapsed;
+    private bool bossSpawned;
 
     void Start()
     {
         if(!cam) cam = Camera.main;
+        SpawnBoss();
     }
 
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= spawnInterval)
-        {
-            spawnAmount = GetCurrentMinute();
-            timer = 0;
-            SpawnEnemy(spawnAmount);
-        }
+        // if (timer >= spawnInterval)
+        // {
+        //     spawnAmount = GetCurrentMinute();
+        //     timer = 0;
+        //     SpawnEnemy(spawnAmount);
+        // }
     }
 
     void SpawnEnemy(int amount)
     {
         if (enemies.Length == 0) return;
-        // get what's visible
+        // get what visible
         var height = cam.orthographicSize * 2f;
         var width = height * cam.aspect;
         var camPos = cam.transform.position;
@@ -73,6 +76,11 @@ public class SpawnManager : MonoBehaviour
             Instantiate(prefab, spawnPos, Quaternion.identity);
         }
 
+    }
+
+    void SpawnBoss()
+    {
+        Instantiate(boss, new Vector3(10,10,10), Quaternion.identity);
     }
 
     private int GetCurrentMinute()
