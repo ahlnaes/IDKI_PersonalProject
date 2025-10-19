@@ -11,6 +11,8 @@ namespace UI
 
         private int score;
 
+        public int Score => score;
+
         private void Awake()
         {
             // singleton since not many needed

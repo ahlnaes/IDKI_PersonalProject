@@ -131,10 +131,10 @@ MonoBehaviour:
   telegraphDuration: 0.5
   fireDuration: 3
   intervalBetweenBursts: 2
-  damagePerSecond: 5
+  damagePerSecond: 4.86
   telegraphMat: {fileID: 2100000, guid: fab1e2855ef450e4498ef48b03dd2cd3, type: 2}
   laserMat: {fileID: 2100000, guid: c6e14ee60cda94a4f9b7027817572d67, type: 2}
-  lineWidth: 1
+  lineWidth: 0.05
 --- !u!114 &3387709140850474971
 MonoBehaviour:
   m_ObjectHideFlags: 0
