@@ -12,12 +12,6 @@ public class DashCDUI : MonoBehaviour
 
     private void Update()
     {
-        if (!player) return;
-        
-        var t = player.GetRemainingCooldown();
-        txt.color = new Color(1, 1, 1, t > 0 ? 0.5f : 1f); // wow you can do this inside the parameters
-        var arrows = Mathf.Clamp(Mathf.CeilToInt(2f - t), 0, 4);
-        txt.text = new string('>', arrows);
+        // Dash removed for VR — nothing to display
     }
-    
 }

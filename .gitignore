@@ -100,3 +100,6 @@ InitTestScene*.unity*
 
 # Ignore annoying DS.Store file from mac
 **/.DS_Store
+
+# Local changes documentation
+changes.md

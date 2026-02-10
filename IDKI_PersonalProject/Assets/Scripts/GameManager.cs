@@ -12,17 +12,33 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseScreen;
     [SerializeField] private GameObject inGameScreen;
     [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private InputActionReference pauseAction;
 
     private bool isGameActive;
     private bool isPaused;
     private bool isGameOver;
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (pauseAction != null)
         {
-            PauseGame();
+            pauseAction.action.Enable();
+            pauseAction.action.performed += OnPausePerformed;
         }
+    }
+
+    private void OnDisable()
+    {
+        if (pauseAction != null)
+        {
+            pauseAction.action.performed -= OnPausePerformed;
+            pauseAction.action.Disable();
+        }
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext ctx)
+    {
+        PauseGame();
     }
 
     private void Start()
@@ -68,7 +84,4 @@ public class GameManager : MonoBehaviour
         StartGame();
         SceneManager.LoadScene("GameScene");
     }
-
-
-    
 }

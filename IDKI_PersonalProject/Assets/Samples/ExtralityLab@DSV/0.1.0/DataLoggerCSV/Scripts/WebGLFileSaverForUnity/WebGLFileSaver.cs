@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 
 public class WebGLFileSaver
 {
-
+#if UNITY_WEBGL && !UNITY_EDITOR
     [DllImport("__Internal")]
     private static extern void UNITY_SAVE(string content, string name, string MIMEType);
-    
+
     [DllImport ("__Internal")]
     private static extern void UNITY_SAVE_BYTEARRAY(byte[] array, int byteLength, string name, string MIMEType);
 
@@ -26,7 +26,7 @@ public class WebGLFileSaver
 
         UNITY_SAVE (content, fileName, MIMEType);
     }
-    
+
     public static void SaveFile(byte[] content, string fileName, string MIMEType = "text/plain;charset=utf-8")
     {
         if (content == null)
@@ -55,7 +55,7 @@ public class WebGLFileSaver
         CheckInit();
 
         if (!IsSavingSupported())
-        { 
+        {
             Debug.LogWarning("Saving is not supported on this device.");
             return false;
         }
@@ -86,4 +86,20 @@ public class WebGLFileSaver
         CheckInit();
         return UNITY_IS_SUPPORTED();
     }
+#else
+    public static void SaveFile(string content, string fileName, string MIMEType = "text/plain;charset=utf-8")
+    {
+        Debug.LogWarning("WebGLFileSaver: SaveFile is only supported in WebGL builds.");
+    }
+
+    public static void SaveFile(byte[] content, string fileName, string MIMEType = "text/plain;charset=utf-8")
+    {
+        Debug.LogWarning("WebGLFileSaver: SaveFile is only supported in WebGL builds.");
+    }
+
+    public static bool IsSavingSupported()
+    {
+        return false;
+    }
+#endif
 }

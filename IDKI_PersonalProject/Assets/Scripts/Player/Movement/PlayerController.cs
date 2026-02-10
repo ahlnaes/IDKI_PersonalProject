@@ -1,136 +1,74 @@
 using System;
-using System.Net;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 
-// playercontroller for moving the character relative to how the camera is facing in the isometric view
 namespace Player.Movement
 {
     public class PlayerController : MonoBehaviour
     {
-        private static readonly int Dash = Animator.StringToHash("Dash");
-        [Header("Movement")] public float speed = 4f;
+        [Header("Input")]
+        public InputActionReference attackAction;
 
-        [Header("Dash")] public float dashSpeed = 20f;
-        public float dashDuration = 0.2f;
-        public float dashCooldown = 2f;
+        [Header("VR Aiming")]
+        [SerializeField] private Transform aimController;
 
-        [Header("Input")] public InputActionReference moveAction;
-        public InputActionReference dashAction;
+        [Header("Weapon")]
+        [SerializeField] private WeaponController weapon;
 
-        [Header("Weapon")] [SerializeField] private WeaponController weapon;
-        
         [Header("Health")]
         [SerializeField] private float maxHealth = 10f;
         [SerializeField] private float currentHealth;
         [SerializeField] private RectTransform healthBar;
 
-        [Header("VFx")] 
+        [Header("VFx")]
         [SerializeField] private GameObject healfx;
         [SerializeField] private GameObject speedfx;
 
-        private CharacterController controller;
-        private Animator animator;
-        private DashAbility dash;
-        private CameraRelativeDirection mapper;
-        private TrailRenderer trailRenderer;
-        private AudioSource audioSource;
-
-        // stuff to make dashing work etc
-        private System.Action<InputAction.CallbackContext> dashHandler;
-        private bool dashPressedThisFrame;
-        public System.Action DashStarted;
-        public System.Action DashEnded;
         public GameManager gameManager;
-        
-        // Add fields
+
         private float baseSpeed;
         private Coroutine speedBuffCo;
         private Coroutine healthBuffCo;
 
+        private ContinuousMoveProvider moveProvider;
+
         private void Awake()
         {
-            controller = GetComponent<CharacterController>();
-            animator = GetComponent<Animator>();
-            trailRenderer = GetComponentInChildren<TrailRenderer>();
-            audioSource = GetComponent<AudioSource>();
-            
             currentHealth = maxHealth;
-            baseSpeed = speed;
-            speedfx.SetActive(false);
-            
-            dash = new DashAbility(dashSpeed, dashDuration, dashCooldown);
-            dash.OnDashStarted += () =>
-            {
-                animator.ResetTrigger(Dash);
-                animator.SetTrigger(Dash);
-                AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
-                trailRenderer.enabled = true;
-                DashStarted?.Invoke();
-            };
-            dash.OnDashEnded += () =>
-            {
-                trailRenderer.enabled = false;
-                DashEnded?.Invoke();
-            };
+            if (speedfx != null) speedfx.SetActive(false);
 
-            mapper = new CameraRelativeDirection();
+            moveProvider = GetComponentInChildren<ContinuousMoveProvider>();
+            if (moveProvider != null)
+                baseSpeed = moveProvider.moveSpeed;
 
-            if (!dashAction) return;
-            dashHandler = _ => dashPressedThisFrame = true;
-            dashAction.action.performed += dashHandler;
+            if (attackAction == null)
+                Debug.LogWarning("[PlayerController] attackAction is not assigned!");
+            if (aimController == null)
+                Debug.LogWarning("[PlayerController] aimController is not assigned!");
+            if (weapon == null)
+                Debug.LogWarning("[PlayerController] weapon is not assigned!");
         }
 
         private void OnEnable()
         {
-            moveAction?.action.Enable();
-            dashAction?.action.Enable();
+            if (attackAction != null)
+                attackAction.action.Enable();
         }
 
         private void OnDisable()
         {
-            if (dashAction != null && dashHandler != null)
-            {
-                dashAction.action.performed -= dashHandler;
-            }
-
-            moveAction?.action.Disable();
-            dashAction?.action.Disable();
+            if (attackAction != null)
+                attackAction.action.Disable();
         }
 
         private void Update()
         {
-            var dt = Time.deltaTime;
+            if (attackAction == null || aimController == null || weapon == null) return;
 
-            // tick dash instead of update so update is handled in one place for the mvmt
-            dash.Tick(controller, dt);
-            // no movement if were in the middle of dashing
-            if (dash.IsDashing)
+            if (attackAction.action.IsPressed())
             {
-                dashPressedThisFrame = false;
-                return;
-            }
-
-            // input mapped to world direction
-            var input = !moveAction ? Vector2.zero : moveAction.action.ReadValue<Vector2>();
-            var dir = mapper.Map(input);
-
-            // movement
-            //if (dir != Vector3.zero) transform.forward = dir;
-            controller.SimpleMove(dir * speed);
-
-            if (dashPressedThisFrame)
-            {
-                dash.TryDash(dir, transform.forward);
-                dashPressedThisFrame = false;
-            }
-
-            if (Mouse.current.leftButton.wasPressedThisFrame || Input.GetMouseButton(0))
-            {
-                var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                if (!Physics.Raycast(ray, out var hit)) return;
-                var direction = (hit.point - weapon.SourcePosition).normalized;
-                weapon.Fire(direction);
+                weapon.Fire(aimController.forward);
             }
         }
 
@@ -154,17 +92,18 @@ namespace Player.Movement
             }
         }
 
-        public float GetRemainingCooldown() => dash.RemainingCooldown;
-        public bool IsDashing() => dash.IsDashing;
-        
+        public float GetRemainingCooldown() => 0f;
+        public bool IsDashing() => false;
+
         public float MaxHealth => maxHealth;
+
         public void Heal(float amount)
         {
             currentHealth = Mathf.Min(maxHealth, currentHealth + Mathf.Abs(amount));
-            healfx.SetActive(true);
+            if (healfx != null) healfx.SetActive(true);
             healthBuffCo = StartCoroutine(HealFX(1f));
         }
-        
+
         public void ApplySpeedBuff(float multiplier, float duration)
         {
             if (speedBuffCo != null) StopCoroutine(speedBuffCo);
@@ -173,30 +112,31 @@ namespace Player.Movement
 
         private System.Collections.IEnumerator SpeedBuffCR(float mult, float dur)
         {
-            speed = baseSpeed * mult;
-            speedfx.SetActive(true);
+            if (moveProvider != null)
+                moveProvider.moveSpeed = baseSpeed * mult;
+            if (speedfx != null) speedfx.SetActive(true);
             var t = dur;
             while (t > 0f)
             {
                 t -= Time.deltaTime;
                 yield return null;
             }
-            speed = baseSpeed;
-            speedfx.SetActive(false);
+            if (moveProvider != null)
+                moveProvider.moveSpeed = baseSpeed;
+            if (speedfx != null) speedfx.SetActive(false);
             speedBuffCo = null;
         }
 
         private System.Collections.IEnumerator HealFX(float dur)
         {
-            healfx.SetActive(true);
+            if (healfx != null) healfx.SetActive(true);
             var t = dur;
             while (t > 0f)
             {
                 t -= Time.deltaTime;
                 yield return null;
             }
-            healfx.SetActive(false);
+            if (healfx != null) healfx.SetActive(false);
         }
-
     }
 }

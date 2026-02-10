@@ -33,6 +33,7 @@ public class WeaponController : MonoBehaviour
         if(!CanFire()) return;
         if (target == Vector3.zero) target = source.forward;
 
+        Debug.Log($"[WeaponController] Firing from {source.name} at position {source.position}");
         var projectile = Instantiate(config.projectile, source.position, Quaternion.LookRotation(target));
         projectile.Launch(target);
         cooldown.Start(1f/config.fireRate);

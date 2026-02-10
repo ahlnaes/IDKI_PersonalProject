@@ -1,22 +1,22 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private Camera cam;
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private float spawnInterval;
-    [SerializeField] private float spawnDistance; // distance from the edge of the camera view
+    [SerializeField] private float spawnRadius = 20f;
     [SerializeField] private int spawnAmount;
 
     private float timer;
-    private float elapsed;
+    private Transform player;
 
     void Start()
     {
-        if(!cam) cam = Camera.main;
+        var playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+            player = playerObj.transform;
     }
 
     private void Update()
@@ -32,47 +32,22 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemy(int amount)
     {
-        if (enemies.Length == 0) return;
-        // get what's visible in the camera
-        var height = cam.orthographicSize * 2f;
-        var width = height * cam.aspect;
-        var camPos = cam.transform.position;
-        
-        //corners of the view area
-        var left = camPos.x - width / 2;
-        var right = camPos.x + width / 2;
-        var top = camPos.z - height / 2f;
-        var bottom = camPos.z + height / 2f;
+        if (enemies.Length == 0 || player == null) return;
+
+        var center = player.position;
 
         for (var i = 0; i < amount; i++)
         {
-            var edge = Random.Range(0, 4);
-            var spawnPos = Vector3.zero;
-            switch (edge)
-            {
-                case 0: // left
-                    spawnPos.x = left - spawnDistance; // make them spawn just a bit outside of screen (doesn't quite work yet)
-                    spawnPos.z = Random.Range(bottom, top);
-                    break;
-                case 1: // right
-                    spawnPos.x = right + spawnDistance;
-                    spawnPos.z = Random.Range(bottom, top);
-                    break;
-                case 2: // top
-                    spawnPos.z = top + spawnDistance;
-                    spawnPos.x = Random.Range(left, right);
-                    break;
-                case 3: // bottom
-                    spawnPos.z = bottom - spawnDistance;
-                    spawnPos.x = Random.Range(left, right);
-                    break;
-            }
+            var angle = Random.Range(0f, Mathf.PI * 2f);
+            var spawnPos = new Vector3(
+                center.x + Mathf.Cos(angle) * spawnRadius,
+                3f,
+                center.z + Mathf.Sin(angle) * spawnRadius
+            );
 
-            spawnPos.y = 3f;
             var prefab = enemies[Random.Range(0, enemies.Length)];
             Instantiate(prefab, spawnPos, Quaternion.identity);
         }
-
     }
 
     private int GetCurrentMinute()
