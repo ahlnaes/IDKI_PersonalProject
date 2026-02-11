@@ -15,9 +15,12 @@ public class PowerUpSpawner : MonoBehaviour
 
     public void TrySpawn(Vector3 position)
     {
-        if (Random.value > dropChance) return;
+        if (DebugVariables.Instance.powerUpSpawnOn)
+        {
+            if (Random.value > dropChance) return;
 
-        position.y = 0f;
-        Instantiate(powerUpPrefab, position, Quaternion.identity);
+            position.y = 0f;
+            Instantiate(powerUpPrefab, position, Quaternion.identity);
+        }
     }
 }

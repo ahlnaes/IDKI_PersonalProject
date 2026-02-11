@@ -21,12 +21,15 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        if (DebugVariables.Instance.enemySpawnOn)
         {
-            spawnAmount = GetCurrentMinute();
-            timer = 0;
-            SpawnEnemy(spawnAmount);
+            timer += Time.deltaTime;
+            if (timer >= spawnInterval)
+            {
+                spawnAmount = GetCurrentMinute();
+                timer = 0;
+                SpawnEnemy(spawnAmount);
+            }
         }
     }
 
