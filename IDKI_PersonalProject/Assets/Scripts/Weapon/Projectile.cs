@@ -30,7 +30,6 @@ public class Projectile : MonoBehaviour
     {
         audioSource.pitch = Random.Range(0.8f, 1.2f);
         AudioSource.PlayClipAtPoint(projectileSoundClip, transform.position);
-        dir.y = 0f;
         rb.linearVelocity = dir.normalized * speed;
         life = 0f;
         maxLife = range;

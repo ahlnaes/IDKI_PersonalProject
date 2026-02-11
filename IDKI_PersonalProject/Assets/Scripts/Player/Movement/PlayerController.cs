@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 
 namespace Player.Movement
@@ -19,7 +20,7 @@ namespace Player.Movement
         [Header("Health")]
         [SerializeField] private float maxHealth = 10f;
         [SerializeField] private float currentHealth;
-        [SerializeField] private RectTransform healthBar;
+        [SerializeField] private Image healthBar;
 
         [Header("VFx")]
         [SerializeField] private GameObject healfx;
@@ -74,8 +75,8 @@ namespace Player.Movement
 
         private void UpdateHealthBar()
         {
-            var width = Mathf.Clamp01(currentHealth / maxHealth);
-            healthBar.localScale = new Vector3(width, 1f, 1f);
+            if (healthBar != null)
+                healthBar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
         }
 
         private void OnCollisionEnter(Collision other)
