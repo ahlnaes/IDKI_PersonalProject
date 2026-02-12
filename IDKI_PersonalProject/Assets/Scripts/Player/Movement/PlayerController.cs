@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -26,29 +27,28 @@ namespace Player.Movement
         [SerializeField] private GameObject healfx;
         [SerializeField] private GameObject speedfx;
 
+        [Header("Damage Detection")]
+        [SerializeField] private float damageRadius = 1f;
+
         public GameManager gameManager;
 
         private float baseSpeed;
         private Coroutine speedBuffCo;
         private Coroutine healthBuffCo;
+        private readonly HashSet<int> damagedBy = new HashSet<int>();
 
         private ContinuousMoveProvider moveProvider;
+        private Camera vrCamera;
 
         private void Awake()
         {
+            vrCamera = Camera.main;
             currentHealth = maxHealth;
             if (speedfx != null) speedfx.SetActive(false);
 
             moveProvider = GetComponentInChildren<ContinuousMoveProvider>();
             if (moveProvider != null)
                 baseSpeed = moveProvider.moveSpeed;
-
-            if (attackAction == null)
-                Debug.LogWarning("[PlayerController] attackAction is not assigned!");
-            if (aimController == null)
-                Debug.LogWarning("[PlayerController] aimController is not assigned!");
-            if (weapon == null)
-                Debug.LogWarning("[PlayerController] weapon is not assigned!");
         }
 
         private void OnEnable()
@@ -65,11 +65,38 @@ namespace Player.Movement
 
         private void Update()
         {
-            if (attackAction == null || aimController == null || weapon == null) return;
-
-            if (attackAction.action.IsPressed())
+            if (attackAction && aimController && weapon)
             {
-                weapon.Fire(aimController.forward);
+                if (attackAction.action.IsPressed())
+                    weapon.Fire(aimController.forward);
+            }
+
+            CheckEnemyDamage();
+        }
+
+        private void CheckEnemyDamage()
+        {
+            var camPos = vrCamera.transform.position;
+            var center = new Vector3(camPos.x, 0.5f, camPos.z);
+            var hits = Physics.OverlapSphere(center, damageRadius);
+            foreach (var hit in hits)
+            {
+                if (!hit.CompareTag("Enemy")) continue;
+                var id = hit.GetInstanceID();
+                if (damagedBy.Contains(id)) continue;
+
+                var enemy = hit.GetComponent<Enemy>();
+                if (enemy == null) continue;
+
+                currentHealth -= enemy.Damage;
+                enemy.Kill();
+                UpdateHealthBar();
+
+                if (currentHealth <= 0 && gameManager != null)
+                {
+                    gameManager.GameOver();
+                    return;
+                }
             }
         }
 
@@ -77,20 +104,6 @@ namespace Player.Movement
         {
             if (healthBar != null)
                 healthBar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            if (other.gameObject.CompareTag("Enemy"))
-            {
-                var enemy = other.gameObject.GetComponent<Enemy>();
-                currentHealth -= enemy.Damage;
-                UpdateHealthBar();
-                if (currentHealth <= 0)
-                {
-                    gameManager.GameOver();
-                }
-            }
         }
 
         public float GetRemainingCooldown() => 0f;

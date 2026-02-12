@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject inGameScreen;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private InputActionReference pauseAction;
+    [SerializeField] private float uiSpawnDistance = 2f;
 
+    private Camera vrCamera;
     private bool isGameActive;
     private bool isPaused;
     private bool isGameOver;
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        vrCamera = Camera.main;
         StartGame();
     }
 
@@ -54,11 +57,23 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    private void PlaceInFrontOfPlayer(GameObject panel)
+    {
+        if (vrCamera == null || panel == null) return;
+        var camTransform = vrCamera.transform;
+        var forward = camTransform.forward;
+        forward.y = 0f;
+        forward.Normalize();
+        panel.transform.position = camTransform.position + forward * uiSpawnDistance;
+        panel.transform.rotation = Quaternion.LookRotation(forward);
+    }
+
     private void PauseGame()
     {
         if (isGameOver) return;
         isPaused = !isPaused;
         isGameActive = !isGameActive;
+        if (isPaused) PlaceInFrontOfPlayer(pauseScreen);
         pauseScreen.SetActive(isPaused);
         inGameScreen.SetActive(!isPaused);
         Time.timeScale = isPaused ? 0 : 1;
@@ -71,6 +86,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         gameOverScreen.GetComponentInChildren<TextMeshProUGUI>().text = "Game Over\n score: " + ScoreManager.Instance.GetScore();
         inGameScreen.SetActive(false);
+        PlaceInFrontOfPlayer(gameOverScreen);
         gameOverScreen.SetActive(true);
     }
 

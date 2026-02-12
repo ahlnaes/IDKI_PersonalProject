@@ -12,6 +12,11 @@ public class Enemy : MonoBehaviour
     
     public float Damage => damageValue;
 
+    public void Kill()
+    {
+        currentHealth = 0;
+    }
+
     private void Awake()
     {
         spawnAnim = GetComponent<Animation>();

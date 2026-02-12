@@ -5,15 +5,15 @@ using UnityEngine;
 public class EnemyFollowPlayer : MonoBehaviour
 {
     [SerializeField] private float speed = 1.5f;
-    private GameObject player;
+    private Camera vrCamera;
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        vrCamera = Camera.main;
     }
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, vrCamera.transform.position, speed * Time.deltaTime);
     }
 }
