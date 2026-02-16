@@ -1264,6 +1264,7 @@ MonoBehaviour:
   gameOverScreen: {fileID: 1214940901}
   pauseAction: {fileID: 1964738751}
   uiSpawnDistance: 2
+  esp32: {fileID: 1924257709}
 --- !u!114 &421504815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3421,6 +3422,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   m_ActionId: 41976d89-60de-4deb-bff9-16b4af96b290
+--- !u!1 &1924257708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1924257710}
+  - component: {fileID: 1924257709}
+  m_Layer: 0
+  m_Name: ESP32Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1924257709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924257708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b18366e0a3d4b4fb4d3e64edd4ff7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ESP32Controller
+  serverIP: 10.204.0.29
+  serverPort: 8081
+  directionalLight: {fileID: 410087040}
+  minIntensity: 0
+  maxIntensity: 3
+--- !u!4 &1924257710
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1924257708}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -114.53206, z: 3.31631}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1955141744
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3788,3 +3838,4 @@ SceneRoots:
   - {fileID: 1964602097}
   - {fileID: 1598285149}
   - {fileID: 799436339}
+  - {fileID: 1924257710}

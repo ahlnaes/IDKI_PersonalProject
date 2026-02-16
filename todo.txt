@@ -1,0 +1,11 @@
+  Tomorrow's setup checklist
+
+  1. Python server: Run WebsocketServerExample.py on a laptop connected to dsv-extrality-lab WiFi. Note the IP it
+  prints.
+  2. ESP32: Open ESP32_LightControl.ino, replace SERVER_IP_HERE with the server IP, upload. Wire potentiometer: middle
+  pin → GPIO 9, outer pins → 3.3V and GND.
+  3. Unity:
+    - Add an empty GameObject "ESP32Controller" with the ESP32Controller script
+    - Set the Server IP to match the Python server
+    - Drag the Directional Light into the directionalLight field
+    - Drag the ESP32Controller into GameManager's esp32 field

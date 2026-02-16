@@ -3,7 +3,6 @@
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 .utmp/
-tangible-interaction/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -98,9 +97,3 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
-
-# Ignore annoying DS.Store file from mac
-**/.DS_Store
-
-# Local changes documentation
-changes.md

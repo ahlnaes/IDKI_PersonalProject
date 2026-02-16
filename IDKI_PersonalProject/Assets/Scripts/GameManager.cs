@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private InputActionReference pauseAction;
     [SerializeField] private float uiSpawnDistance = 2f;
+    [SerializeField] private ESP32Controller esp32;
 
     private Camera vrCamera;
     private bool isGameActive;
@@ -97,15 +98,18 @@ public class GameManager : MonoBehaviour
         inGameScreen.SetActive(false);
         PlaceInFrontOfPlayer(gameOverScreen);
         gameOverScreen.SetActive(true);
+        if (esp32 != null) esp32.SendLedOn();
     }
 
     public void Quit()
     {
+        if (esp32 != null) esp32.SendLedOff();
         SceneManager.LoadScene("MainMenuVR");
     }
 
     public void Restart()
     {
+        if (esp32 != null) esp32.SendLedOff();
         StartGame();
         SceneManager.LoadScene("GameScene");
     }
