@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 
 namespace Player.Movement
 {
@@ -25,30 +23,22 @@ namespace Player.Movement
 
         [Header("VFx")]
         [SerializeField] private GameObject healfx;
-        [SerializeField] private GameObject speedfx;
 
         [Header("Damage Detection")]
         [SerializeField] private float damageRadius = 1f;
 
         public GameManager gameManager;
 
-        private float baseSpeed;
-        private Coroutine speedBuffCo;
         private Coroutine healthBuffCo;
         private readonly HashSet<int> damagedBy = new HashSet<int>();
 
-        private ContinuousMoveProvider moveProvider;
         private Camera vrCamera;
 
         private void Awake()
         {
             vrCamera = Camera.main;
             currentHealth = maxHealth;
-            if (speedfx != null) speedfx.SetActive(false);
-
-            moveProvider = GetComponentInChildren<ContinuousMoveProvider>();
-            if (moveProvider != null)
-                baseSpeed = moveProvider.moveSpeed;
+            UpdateHealthBar();
         }
 
         private void OnEnable()
@@ -114,31 +104,9 @@ namespace Player.Movement
         public void Heal(float amount)
         {
             currentHealth = Mathf.Min(maxHealth, currentHealth + Mathf.Abs(amount));
+            UpdateHealthBar();
             if (healfx != null) healfx.SetActive(true);
             healthBuffCo = StartCoroutine(HealFX(1f));
-        }
-
-        public void ApplySpeedBuff(float multiplier, float duration)
-        {
-            if (speedBuffCo != null) StopCoroutine(speedBuffCo);
-            speedBuffCo = StartCoroutine(SpeedBuffCR(multiplier, duration));
-        }
-
-        private System.Collections.IEnumerator SpeedBuffCR(float mult, float dur)
-        {
-            if (moveProvider != null)
-                moveProvider.moveSpeed = baseSpeed * mult;
-            if (speedfx != null) speedfx.SetActive(true);
-            var t = dur;
-            while (t > 0f)
-            {
-                t -= Time.deltaTime;
-                yield return null;
-            }
-            if (moveProvider != null)
-                moveProvider.moveSpeed = baseSpeed;
-            if (speedfx != null) speedfx.SetActive(false);
-            speedBuffCo = null;
         }
 
         private System.Collections.IEnumerator HealFX(float dur)

@@ -1,35 +1,34 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using Player.Movement;
 
+[RequireComponent(typeof(XRGrabInteractable))]
 public class PowerUpPickup : MonoBehaviour
 {
-    [SerializeField] private string playerTag = "Player";
-
     [Header("Heal")]
     [SerializeField] private float healFraction = 0.5f; // 50% of max
 
-    [Header("Speed Buff")]
-    [SerializeField] private float speedMultiplier = 2f; // +100%
-    [SerializeField] private float buffDuration   = 6f;  // seconds
+    private XRGrabInteractable grabInteractable;
 
-    private bool consumed;
-
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (consumed || !other.CompareTag(playerTag)) return;
-        if (!other.TryGetComponent<PlayerController>(out var player)) return;
+        grabInteractable = GetComponent<XRGrabInteractable>();
+        grabInteractable.selectEntered.AddListener(OnGrabbed);
+    }
 
-        if (Random.value < 0.5f)
-        {
-            // Heal 50% max
+    private void OnDestroy()
+    {
+        if (grabInteractable != null)
+            grabInteractable.selectEntered.RemoveListener(OnGrabbed);
+    }
+
+    private void OnGrabbed(SelectEnterEventArgs args)
+    {
+        var player = FindAnyObjectByType<PlayerController>();
+        if (player != null)
             player.Heal(player.MaxHealth * healFraction);
-        }
-        else
-        {
-            player.ApplySpeedBuff(speedMultiplier, buffDuration);
-        }
 
-        consumed = true;
         Destroy(gameObject);
     }
 }

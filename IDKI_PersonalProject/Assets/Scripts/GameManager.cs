@@ -19,10 +19,16 @@ public class GameManager : MonoBehaviour
     private bool isGameActive;
     private bool isPaused;
     private bool isGameOver;
+    private Scene currentScene;
+
+    private void Awake()
+    {
+        currentScene = SceneManager.GetActiveScene();
+    }
 
     private void OnEnable()
     {
-        if (pauseAction != null)
+        if (pauseAction != null && currentScene.buildIndex == 1)
         {
             pauseAction.action.Enable();
             pauseAction.action.performed += OnPausePerformed;
@@ -31,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (pauseAction != null)
+        if (pauseAction != null && currentScene.buildIndex == 1)
         {
             pauseAction.action.performed -= OnPausePerformed;
             pauseAction.action.Disable();
@@ -46,7 +52,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         vrCamera = Camera.main;
-        StartGame();
+        if (currentScene.buildIndex == 1)
+        {
+            StartGame();
+        }
     }
 
     private void StartGame()
@@ -92,7 +101,7 @@ public class GameManager : MonoBehaviour
 
     public void Quit()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenuVR");
     }
 
     public void Restart()
